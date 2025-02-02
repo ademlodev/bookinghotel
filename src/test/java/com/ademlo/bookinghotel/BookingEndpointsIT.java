@@ -8,7 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BookingEndpointsIT {
@@ -17,20 +18,21 @@ public class BookingEndpointsIT {
     int port;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         RestAssured.port = port;
     }
 
     @Test
     void contextLoads() {
     }
+
     @Test
-    void bookingRoomReturnsConfirmation(){
+    void bookingRoomReturnsConfirmation() {
         String requestBody = "{" +
-                    " \"employeeId\": \"123\", " +
-                    " \"roomId\": \"101\", " +
-                    " \"startDate\": \"2023-04-05\", " +
-                    " \"endDate\": \"2023-04-15\" " +
+                " \"employeeId\": \"123\", " +
+                " \"roomId\": \"101\", " +
+                " \"startDate\": \"2023-04-05\", " +
+                " \"endDate\": \"2023-04-15\" " +
                 "}";
 
         given()
@@ -45,7 +47,7 @@ public class BookingEndpointsIT {
     }
 
     @Test
-    void bookingReturnsDetail(){
+    void bookingReturnsDetail() {
         String requestBody = "{" +
                 " \"employeeId\": \"123\", " +
                 " \"roomId\": \"101\", " +
@@ -75,5 +77,15 @@ public class BookingEndpointsIT {
                 .body("roomId", equalTo(101))
                 .body("startDate", equalTo("2023-04-05T00:00:00.000+00:00"))
                 .body("endDate", equalTo("2023-04-15T00:00:00.000+00:00"));
+    }
+
+    @Test
+    void getNonExistsBookingIdReturnNotFound() {
+        String nonExistsBookingId = "non-exist-id";
+
+        given().pathParams("bookingId", nonExistsBookingId).when()
+                .get("/booking/{bookingId}")
+                .then()
+                .statusCode(404);
     }
 }
