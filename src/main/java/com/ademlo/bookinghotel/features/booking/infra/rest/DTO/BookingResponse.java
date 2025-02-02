@@ -1,15 +1,15 @@
 package com.ademlo.bookinghotel.features.booking.infra.rest.DTO;
 
 public class BookingResponse {
-    private final int bookingId;
+    private final String bookingId;
     private final String message;
 
-    public BookingResponse(int bookingId, String message) {
+    public BookingResponse(String bookingId, String message) {
         this.bookingId = bookingId;
         this.message = message;
     }
 
-    public int getBookingId() {
+    public String getBookingId() {
         return bookingId;
     }
 

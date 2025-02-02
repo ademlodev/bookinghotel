@@ -1,5 +1,7 @@
 package com.ademlo.bookinghotel.features.booking.infra.rest;
 
+import com.ademlo.bookinghotel.features.booking.domain.model.Booking;
+import com.ademlo.bookinghotel.features.booking.infra.persistence.BookingLocalRepository;
 import com.ademlo.bookinghotel.features.booking.infra.rest.DTO.BookingResponse;
 import com.ademlo.bookinghotel.features.booking.infra.rest.DTO.BookingDTO;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +12,22 @@ import java.sql.Date;
 @RequestMapping("/booking")
 public class BookingController {
 
+    private final BookingLocalRepository bookingLocalRepository;
+
+    public BookingController(BookingLocalRepository bookingLocalRepository) {
+        this.bookingLocalRepository = bookingLocalRepository;
+    }
+
     @PostMapping("")
     public BookingResponse createBooking(@RequestBody BookingDTO bookingDTO){
-        return new BookingResponse(1, "Reservation confirmed");
+        String bookingId = bookingLocalRepository.addBooking(
+                Booking.newBooking(bookingDTO.getEmployeeId(), bookingDTO.getRoomId(),bookingDTO.getStartDate(), bookingDTO.getEndDate()));
+        return new BookingResponse(bookingId, "Reservation confirmed");
     }
 
     @GetMapping("/{bookingId}")
     public BookingDTO createBooking(@PathVariable String bookingId){
-        return new BookingDTO(123, 101, Date.valueOf("2023-04-05"),Date.valueOf("2023-04-15"));
+        Booking booking = bookingLocalRepository.getBookingBy(bookingId);
+        return new BookingDTO(booking.getEmployeeId(), booking.getRoomId(), booking.getStartDate(),booking.getEndDate());
     }
 }

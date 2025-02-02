@@ -49,11 +49,11 @@ public class BookingEndpointsIT {
         String requestBody = "{" +
                 " \"employeeId\": \"123\", " +
                 " \"roomId\": \"101\", " +
-                " \"startDate\": \"2023-04-05\", " +
-                " \"endDate\": \"2023-04-15\" " +
+                " \"startDate\": \"2023-04-05T00:00:00.000+00:00\", " +
+                " \"endDate\": \"2023-04-15T00:00:00.000+00:00\" " +
                 "}";
 
-        Integer bookingId = given()
+        String bookingId = given()
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
@@ -73,7 +73,7 @@ public class BookingEndpointsIT {
                 .statusCode(200)
                 .body("employeeId", equalTo(123))
                 .body("roomId", equalTo(101))
-                .body("startDate", equalTo("2023-04-05"))
-                .body("endDate", equalTo("2023-04-15"));
+                .body("startDate", equalTo("2023-04-05T00:00:00.000+00:00"))
+                .body("endDate", equalTo("2023-04-15T00:00:00.000+00:00"));
     }
 }
