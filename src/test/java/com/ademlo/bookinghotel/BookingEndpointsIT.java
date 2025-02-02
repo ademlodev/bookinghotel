@@ -88,4 +88,22 @@ public class BookingEndpointsIT {
                 .then()
                 .statusCode(404);
     }
+
+    @Test
+    void bookingWithStartDateAfterEndDateReturnBadRequest() {
+        String requestBody = "{" +
+                " \"employeeId\": \"123\", " +
+                " \"roomId\": \"101\", " +
+                " \"startDate\": \"2023-04-05T00:00:00.000+00:00\", " +
+                " \"endDate\": \"2023-04-04T00:00:00.000+00:00\" " +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post("/booking")
+                .then()
+                .statusCode(400);
+    }
 }

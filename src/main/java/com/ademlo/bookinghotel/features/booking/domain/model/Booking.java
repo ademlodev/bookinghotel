@@ -18,8 +18,11 @@ public class Booking {
         this.endDate = endDate;
     }
 
-    public static Booking newBooking(int employeeId, int roomId, Date startDate, Date endDate) {
-        return  new Booking(UUID.randomUUID().toString(), employeeId, roomId,startDate, endDate);
+    public static Booking newBooking(int employeeId, int roomId, Date startDate, Date endDate) throws Exception {
+        if (startDate.after(endDate)) {
+            throw new Exception("StartDate is after EndDate");
+        }
+        return new Booking(UUID.randomUUID().toString(), employeeId, roomId, startDate, endDate);
     }
 
     public String getId() {

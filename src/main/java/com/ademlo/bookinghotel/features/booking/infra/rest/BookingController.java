@@ -18,10 +18,15 @@ public class BookingController {
     }
 
     @PostMapping("")
-    public BookingResponse createBooking(@RequestBody BookingDTO bookingDTO) {
-        String bookingId = bookingLocalRepository.addBooking(
-                Booking.newBooking(bookingDTO.getEmployeeId(), bookingDTO.getRoomId(), bookingDTO.getStartDate(), bookingDTO.getEndDate()));
-        return new BookingResponse(bookingId, "Reservation confirmed");
+    public ResponseEntity<BookingResponse> createBooking(@RequestBody BookingDTO bookingDTO) {
+        String bookingId = null;
+        try {
+            bookingId = bookingLocalRepository.addBooking(
+                    Booking.newBooking(bookingDTO.getEmployeeId(), bookingDTO.getRoomId(), bookingDTO.getStartDate(), bookingDTO.getEndDate()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        return ResponseEntity.ok(new BookingResponse(bookingId, "Reservation confirmed"));
     }
 
     @GetMapping("/{bookingId}")
